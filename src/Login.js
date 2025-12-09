@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 
 function Login() {
+  const API_URL = "https://project-backend-1-wrwn.onrender.com/api/";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -23,19 +25,26 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/login/", {
+      const response = await axios.post(`${API_URL}login/`, {
         email,
         password,
       });
 
-      localStorage.setItem("access_token", response.data.access);
+      // Save token if exists
+      if (response.data.access) {
+        localStorage.setItem("access_token", response.data.access);
+      }
+
       showSnackbar("Login successful!", "success");
 
       setTimeout(() => {
         navigate("/dashboard");
       }, 1500);
     } catch (error) {
-      showSnackbar(error.response?.data?.error || "Login failed", "error");
+      showSnackbar(
+        error.response?.data?.error || "Login failed. Try again.",
+        "error"
+      );
     }
   };
 
@@ -98,7 +107,7 @@ function Login() {
       {/* Snackbar */}
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={6000}
+        autoHideDuration={4000}
         onClose={handleCloseSnackbar}
       >
         <Alert

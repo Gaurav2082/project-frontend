@@ -31,11 +31,11 @@ function Signup() {
         throw new Error("Please fill all fields");
       }
 
-      await axios.post("http://127.0.0.1:8000/api/signup/", {
-        name,
-        email,
-        password,
-      });
+      await axios.post("https://project-backend-1-wrwn.onrender.com/api/signup/", {
+  name,
+  email,
+  password,
+});
 
       setMessage("Signup successful!");
       setTimeout(() => navigate("/login"), 1500);
